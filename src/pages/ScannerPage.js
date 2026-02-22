@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import fetchWithFallback from "../utils/apiClient";
 
 export default function ScannerPage() {
   const [ticker, setTicker] = useState("");
@@ -32,7 +33,7 @@ export default function ScannerPage() {
   // Fetch summary
   async function fetchSummary(ticker) {
     try {
-      const res = await fetch(`/api/summary?ticker=${ticker}`);
+      const res = await fetchWithFallback(`/api/summary?ticker=${ticker}`);
       const data = await res.json();
       if (!data || data.error) return null;
       return data;
@@ -45,7 +46,7 @@ export default function ScannerPage() {
   // Fetch history
   async function fetchHistory(ticker, range) {
     try {
-      const res = await fetch(
+      const res = await fetchWithFallback(
         `/api/history?ticker=${ticker}&range=${range}`
       );
       const data = await res.json();

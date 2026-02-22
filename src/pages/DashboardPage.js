@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import fetchWithFallback from "../utils/apiClient";
 
 export default function DashboardPage({ portfolio }) {
   // -----------------------------
@@ -35,9 +36,7 @@ export default function DashboardPage({ portfolio }) {
   useEffect(() => {
     async function loadIndexes() {
       const fetchIndex = async (symbol) => {
-        const res = await fetch(
-          `/api/index?symbol=${symbol}`
-        );
+        const res = await fetchWithFallback(`/api/index?symbol=${symbol}`);
         return await res.json();
       };
 
@@ -49,9 +48,7 @@ export default function DashboardPage({ portfolio }) {
     }
 
     async function loadTrending() {
-      const res = await fetch(
-        "/api/scan?mode=balanced"
-      );
+      const res = await fetchWithFallback("/api/scan?mode=balanced");
       const data = await res.json();
       setTrending(data.results || []);
     }
@@ -70,7 +67,7 @@ export default function DashboardPage({ portfolio }) {
     async function loadHistory() {
       try {
         setPopupLoading(true);
-        const res = await fetch(
+        const res = await fetchWithFallback(
           `/api/history?ticker=${popup.symbol}`
         );
         const data = await res.json();

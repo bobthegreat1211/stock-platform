@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import fetchWithFallback from "../utils/apiClient";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
@@ -18,7 +19,7 @@ export default function PortfolioPage({ portfolio, setPortfolio }) {
 
   async function fetchStockForPortfolio(ticker) {
     try {
-      const res = await fetch(
+      const res = await fetchWithFallback(
         `/api/summary?ticker=${ticker}`
       );
       const data = await res.json();
