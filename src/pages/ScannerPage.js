@@ -32,7 +32,7 @@ export default function ScannerPage() {
   // Fetch summary
   async function fetchSummary(ticker) {
     try {
-      const res = await fetch(`https://stock-platform-backend-43qn.onrender.com/api/summary?ticker=${ticker}`);
+      const res = await fetch(`/api/summary?ticker=${ticker}`);
       const data = await res.json();
       if (!data || data.error) return null;
       return data;
@@ -46,7 +46,7 @@ export default function ScannerPage() {
   async function fetchHistory(ticker, range) {
     try {
       const res = await fetch(
-        `https://stock-platform-backend-43qn.onrender.com/api/history?ticker=${ticker}&range=${range}`
+        `/api/history?ticker=${ticker}&range=${range}`
       );
       const data = await res.json();
       if (!Array.isArray(data)) return null;

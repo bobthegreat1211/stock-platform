@@ -36,7 +36,7 @@ export default function DashboardPage({ portfolio }) {
     async function loadIndexes() {
       const fetchIndex = async (symbol) => {
         const res = await fetch(
-          `https://stock-platform-backend-43qn.onrender.com/api/index?symbol=${symbol}`
+          `/api/index?symbol=${symbol}`
         );
         return await res.json();
       };
@@ -50,7 +50,7 @@ export default function DashboardPage({ portfolio }) {
 
     async function loadTrending() {
       const res = await fetch(
-        "https://stock-platform-backend-43qn.onrender.com/api/scan?mode=balanced"
+        "/api/scan?mode=balanced"
       );
       const data = await res.json();
       setTrending(data.results || []);
@@ -71,7 +71,7 @@ export default function DashboardPage({ portfolio }) {
       try {
         setPopupLoading(true);
         const res = await fetch(
-          `https://stock-platform-backend-43qn.onrender.com/api/history?ticker=${popup.symbol}`
+          `/api/history?ticker=${popup.symbol}`
         );
         const data = await res.json();
         setPopupHistory(data || []);

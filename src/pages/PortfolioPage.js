@@ -19,7 +19,7 @@ export default function PortfolioPage({ portfolio, setPortfolio }) {
   async function fetchStockForPortfolio(ticker) {
     try {
       const res = await fetch(
-        `https://stock-platform-backend-43qn.onrender.com/api/summary?ticker=${ticker}`
+        `/api/summary?ticker=${ticker}`
       );
       const data = await res.json();
 
