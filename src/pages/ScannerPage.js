@@ -32,7 +32,7 @@ export default function ScannerPage() {
   // Fetch summary
   async function fetchSummary(ticker) {
     try {
-      const res = await fetch(`https://backend-r60u3sswg-bobthegreat1211s-projects.vercel.app/api/summary?ticker=${ticker}`);
+      const res = await fetch(`https://stock-platform-backend-43qn.onrender.com/api/summary?ticker=${ticker}`);
       const data = await res.json();
       if (!data || data.error) return null;
       return data;
@@ -46,7 +46,7 @@ export default function ScannerPage() {
   async function fetchHistory(ticker, range) {
     try {
       const res = await fetch(
-        `https://backend-r60u3sswg-bobthegreat1211s-projects.vercel.app/api/history?ticker=${ticker}&range=${range}`
+        `https://stock-platform-backend-43qn.onrender.com/api/history?ticker=${ticker}&range=${range}`
       );
       const data = await res.json();
       if (!Array.isArray(data)) return null;

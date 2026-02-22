@@ -19,7 +19,7 @@ export default function PortfolioPage({ portfolio, setPortfolio }) {
   async function fetchStockForPortfolio(ticker) {
     try {
       const res = await fetch(
-        `https://backend-r60u3sswg-bobthegreat1211s-projects.vercel.app/api/summary?ticker=${ticker}`
+        `https://stock-platform-backend-43qn.onrender.com/api/summary?ticker=${ticker}`
       );
       const data = await res.json();
 
