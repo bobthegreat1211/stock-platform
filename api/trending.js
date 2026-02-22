@@ -1,4 +1,5 @@
 import axios from 'axios';
+import cache from './cache';
 
 export default async function handler(req, res) {
   try {
@@ -41,7 +42,7 @@ export default async function handler(req, res) {
     }
 
     results.sort((a, b) => Math.abs(b.change) - Math.abs(a.change));
-
+    cache.setCached(req, results, 30000);
     return res.json(results);
   } catch (err) {
     console.error('TRENDING API ERROR:', err?.message || err);

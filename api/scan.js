@@ -1,4 +1,5 @@
 import axios from 'axios';
+import cache from './cache';
 
 export default async function handler(req, res) {
   try {
@@ -110,6 +111,9 @@ export default async function handler(req, res) {
       }
     }
 
+    const cached = cache.getCached(req);
+    if (cached) return res.json(cached);
+
     for (let i = 0; i < symbols.length; i += batchSize) {
       const batch = symbols.slice(i, i + batchSize);
       const batchPromises = batch.map((s) => analyzeSymbol(s));
@@ -119,7 +123,9 @@ export default async function handler(req, res) {
 
     results.sort((a, b) => b.score - a.score);
 
-    return res.json({ mode, totalScanned: symbols.length, count: results.length, results });
+    const out = { mode, totalScanned: symbols.length, count: results.length, results };
+    cache.setCached(req, out, 60000);
+    return res.json(out);
   } catch (err) {
     console.error('SCAN API ERROR:', err?.message || err);
     return res.status(500).json({ error: 'Server error' });

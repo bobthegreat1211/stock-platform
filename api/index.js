@@ -1,4 +1,5 @@
 import axios from 'axios';
+import cache from './cache';
 
 export default async function handler(req, res) {
   try {
@@ -6,6 +7,10 @@ export default async function handler(req, res) {
     if (!symbol) return res.status(400).json({ error: 'Missing index symbol' });
 
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}?interval=1d&range=5d&includePrePost=true`;
+
+    const cached = cache.getCached(req);
+    if (cached) return res.json(cached);
+
     const response = await axios.get(url);
 
     const result = response.data.chart.result?.[0];
@@ -13,7 +18,7 @@ export default async function handler(req, res) {
 
     const meta = result.meta;
 
-    return res.json({
+    const out = {
       symbol: meta.symbol,
       price: meta.regularMarketPrice ?? 0,
       previousClose:
@@ -21,7 +26,9 @@ export default async function handler(req, res) {
         meta.regularMarketPrice ??
         0,
       currency: meta.currency || 'USD',
-    });
+    };
+    cache.setCached(req, out, 30000);
+    return res.json(out);
   } catch (err) {
     console.error('INDEX API ERROR:', err?.message || err);
     return res.status(500).json({ error: 'Server error' });
