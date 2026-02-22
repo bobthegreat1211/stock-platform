@@ -16,7 +16,7 @@ export default function PortfolioPage() {
 
   useEffect(() => {
     setPortfolio(auth.getUserPortfolio());
-  }, [auth.user]);
+  }, [auth]);
 
   const fmt = (num) =>
     num?.toLocaleString(undefined, {

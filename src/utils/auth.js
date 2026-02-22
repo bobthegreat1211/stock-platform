@@ -61,6 +61,8 @@ export function setUserData(email, key, value) {
   saveUsers(users);
 }
 
-export default {
+const authObject = {
   register, login, logout, getCurrentUser, getUserData, setUserData
 };
+
+export default authObject;
