@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from '../AuthContext';
 import fetchWithFallback from "../utils/apiClient";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function PortfolioPage({ portfolio, setPortfolio }) {
+export default function PortfolioPage() {
+  const auth = useContext(AuthContext);
+  const [portfolio, setPortfolio] = useState(auth.getUserPortfolio());
   const [ticker, setTicker] = useState("");
   const [shares, setShares] = useState("");
   const [buyPrice, setBuyPrice] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    setPortfolio(auth.getUserPortfolio());
+  }, [auth.user]);
 
   const fmt = (num) =>
     num?.toLocaleString(undefined, {
@@ -98,6 +105,7 @@ export default function PortfolioPage({ portfolio, setPortfolio }) {
     }
 
     setPortfolio(updatedPortfolio);
+    auth.setUserPortfolio(updatedPortfolio);
 
     setTicker("");
     setShares("");

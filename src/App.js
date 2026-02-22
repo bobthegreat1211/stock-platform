@@ -5,63 +5,36 @@ import Sidebar from "./components/Sidebar";
 import DashboardPage from "./pages/DashboardPage";
 import PortfolioPage from "./pages/PortfolioPage";
 import ScannerPage from "./pages/ScannerPage";
+import LoginPage from "./pages/LoginPage";
+import { AuthProvider, AuthContext } from './AuthContext';
 
 export default function App() {
-  // GLOBAL PORTFOLIO STATE
-  const [portfolio, setPortfolio] = useState([]);
-
-  // ----------------------------------------------------
-  // LOAD PORTFOLIO FROM LOCALSTORAGE ON STARTUP
-  // ----------------------------------------------------
-  useEffect(() => {
-    const saved = localStorage.getItem("portfolio");
-    console.log("LOADED FROM LOCALSTORAGE:", saved);
-
-    if (saved) {
-      try {
-        setPortfolio(JSON.parse(saved));
-      } catch (err) {
-        console.error("JSON PARSE ERROR:", err);
-      }
-    }
-  }, []);
-
-  // ----------------------------------------------------
-  // SAVE PORTFOLIO TO LOCALSTORAGE WHENEVER IT CHANGES
-  // ----------------------------------------------------
-  useEffect(() => {
-    console.log("SAVING PORTFOLIO TO LOCALSTORAGE:", portfolio);
-    localStorage.setItem("portfolio", JSON.stringify(portfolio));
-  }, [portfolio]);
-
   return (
-    <Router>
-      <Sidebar />
+    <AuthProvider>
+      <Router>
+        <Sidebar />
 
-      <div
-        style={{
-          marginLeft: "250px",
-          padding: "20px",
-          width: "calc(100% - 250px)",
-          boxSizing: "border-box",
-        }}
-      >
-        <Routes>
-          <Route path="/" element={<DashboardPage portfolio={portfolio} />} />
+        <div
+          style={{
+            marginLeft: "250px",
+            padding: "20px",
+            width: "calc(100% - 250px)",
+            boxSizing: "border-box",
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<DashboardPage />} />
 
-          <Route
-            path="/portfolio"
-            element={
-              <PortfolioPage
-                portfolio={portfolio}
-                setPortfolio={setPortfolio}
-              />
-            }
-          />
+            <Route
+              path="/portfolio"
+              element={<PortfolioPage />}
+            />
 
-          <Route path="/scanner" element={<ScannerPage />} />
-        </Routes>
-      </div>
-    </Router>
+            <Route path="/scanner" element={<ScannerPage />} />
+            <Route path="/login" element={<LoginPage />} />
+          </Routes>
+        </div>
+      </Router>
+    </AuthProvider>
   );
 }
