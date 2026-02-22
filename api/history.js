@@ -1,4 +1,5 @@
 import axios from 'axios';
+import cache from './cache';
 
 export default async function handler(req, res) {
   try {
@@ -14,6 +15,10 @@ export default async function handler(req, res) {
       '1d';
 
     const url = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?range=${range}&interval=${interval}`;
+
+    const cached = cache.getCached(req);
+    if (cached) return res.json(cached);
+
     const response = await axios.get(url);
     const result = response.data.chart.result?.[0];
 
@@ -27,6 +32,7 @@ export default async function handler(req, res) {
       close: closes[i],
     }));
 
+    cache.setCached(req, history, 60000);
     return res.json(history);
   } catch (err) {
     console.error('History error:', err?.message || err);
